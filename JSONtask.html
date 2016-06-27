@@ -1,0 +1,70 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+<script>
+
+//Handles errors
+window.addEventListener('error',function(e){
+console.log(e)}, true);
+
+//Handles the storage of information
+		var storageHandler = function(unstoredObject){
+		if (unstoredObject != null){
+		//Later, add a warning that a attribute was null, and what id it was
+			document.write(unstoredObject);
+			}
+		}
+		//Checks objects from the canvas 
+		var basicCheck = function(canvasObject){
+			if (Array.isArray(canvasObject)){
+				for (var n=0; n<canvasObject.length; n++){
+				basicCheck(canvasObject[n]);
+				document.write("<br />");
+				}
+			}
+			
+			else if (typeof canvasObject === 'string'){
+				if (canvasObject.length > 0){
+				storageHandler(canvasObject);
+				document.write("<br />");
+				}
+			}
+
+			else if (typeof canvasObject === 'number'){
+				storageHandler(canvasObject);
+				document.write("<br />");
+			}
+			else if (typeof canvasObject === 'object'){
+				for (n in canvasObject){
+					if (canvasObject.hasOwnProperty(n)){
+						if (canvasObject[n] != undefined){
+						basicCheck(n);
+						document.write(": ");
+						basicCheck(canvasObject[n]);
+						document.write("<br />");
+					}
+					}
+				}
+			}
+		};
+
+			
+
+
+		//Parses the canvas in order to obtain necessary data for redrawing the canvas
+		//How information will be parsed depends on the type of canvas
+		var canvasParser = function(canvas){
+			var text = canvas.responseText;
+			var parsedCanv = JSON.parse(text);
+			console.log(parsedCanv);
+			var type = parsedCanv["@type"];
+			//for (var n in parsedCanv){
+				basicCheck(parsedCanv);
+			//}
+		};
+
+
+		//Some tests, to be deleted later
+		var moreThings = '[{"@another":"anime", "@food":"fish"}, {"@pet":"rabbit"},{"@number":13,"@nothing":null}]';
+		var aThing = $.getJSON("http://165.134.241.141/annotationstore/annotation/55f9da84e4b04dde25a2734c", function(){console.log("success")}).done(function()
+		{canvasParser(aThing);});
+</script>
