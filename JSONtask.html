@@ -50,6 +50,19 @@ console.log(e)}, true);
 				}
 			}
 		};
+		
+		var handleJSON = function (url) {
+			//test if url first (basic test)
+			var result = url.search("http");
+			if (result > -1) {
+				var rexp = /\.jpg/i;
+				if (rexp.test(url)) {
+					resolveImage(url);
+				} else {
+					alert("Found a URL, but could not identify it!");
+				}
+			}	
+		};
 
 			
 
