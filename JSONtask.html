@@ -51,7 +51,7 @@ console.log(e)}, true);
 			}
 		};
 		
-		var handleJSON = function (url) {
+		var handleURL = function (url) {
 			//test if url first (basic test)
 			var result = url.search("http");
 			if (result > -1) {
@@ -63,8 +63,14 @@ console.log(e)}, true);
 				}
 			}	
 		};
+		
+		var resolveImage = function (imgUrl) {
+			var img = $("<img src='" + imgUrl + "' />");
+			img.on("load", function () {
+				//TODO: display the image somewhere here!
+			});
+		};
 
-			
 
 
 		//Parses the canvas in order to obtain necessary data for redrawing the canvas
