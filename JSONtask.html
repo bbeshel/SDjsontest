@@ -35,13 +35,14 @@
 				//if (canvasObject.hasOwnProperty(n)){
 					if (Array.isArray(canvasObject[n]) || typeof(canvasObject[n]) == 'object'){
 						switch(Array.isArray(canvasObject[n])){
+							//May move this to multiObjectHelper later
 							case true:	
 								curTextLine += n + ":(Array)";
 								textline(curTextLine);
 								multipleObjectHelper(canvasObject[n]);
-								curTextLine += ":(/Array)";
+								curTextLine += "(/Array)";
 								<!-- curTextLine +=("<br />");				 -->
-								textline(curTextLine);
+								textline(curTextLine, 1);
 								break;
 							
 							case false:
@@ -50,11 +51,11 @@
 								multipleObjectHelper(canvasObject[n]);
 								curTextLine += "(/Object)";
 								<!-- curTextLine +=("<br />");				 -->
-								textline(curTextLine);
+								textline(curTextLine, 1);
 						
 						}			
 					}
-					if (validChecker(canvasObject[n]) == true){
+					else if (validChecker(canvasObject[n]) == true){
 						storageHandler(n);
 						curTextLine +=": ";
 						storageHandler(canvasObject[n]);
@@ -171,8 +172,14 @@
 			});
 		};
 		
-		var textline = function (text) {
-			$curCont.append("<p>" + text + "</p>");
+		var textline = function (text, bool) {
+			if (bool){
+				var para = "<p class='colorChange'>"
+			}
+			else{
+			var para = "<p>";
+			}
+			$curCont.append(para + text + "</p>");
 			curTextLine = "";
 		};
 
