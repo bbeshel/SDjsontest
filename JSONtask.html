@@ -18,6 +18,7 @@
 		var $curCont = $("#textBoxx");
 		var $curImg = $("#imgBoxx");
 		var curTextLine = "";
+		var lastURL = "";
 
 		//Handles errors
 		window.addEventListener('error',function(e){
@@ -33,7 +34,7 @@
 			for (n in canvasObject){
 				//if (canvasObject.hasOwnProperty(n)){
 					if (Array.isArray(canvasObject[n]) || typeof(canvasObject[n]) == 'object'){
-							curTextLine += n + ":(Array)";
+						curTextLine += n + ":(Array)";
 						<!-- curTextLine +=("<br />"); -->
 						multipleObjectHelper(canvasObject[n]);
 						curTextLine += n + ":(/Array)";
@@ -134,6 +135,11 @@
 			if (result > -1) {
 				var rexp = /\.jpg/i;
 				if (rexp.test(url)) {
+					if (url == lastURL) {
+						return;
+					} else {
+						lastURL = url;
+					}
 					resolveImage(url);
 				} else {
 					alert("Found a URL, but could not identify it!");
