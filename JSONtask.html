@@ -143,6 +143,7 @@
 					resolveImage(url);
 				} else {
 					alert("Found a URL, but could not identify it!");
+					console.log(url);
 				}
 			}	
 		};
@@ -159,7 +160,6 @@
 		
 		var textline = function (text) {
 			$curCont.append("<p>" + text + "</p>");
-			$curCont.append("<br />");
 			curTextLine = "";
 		};
 
