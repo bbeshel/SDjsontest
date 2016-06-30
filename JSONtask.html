@@ -31,25 +31,15 @@
 		//Checks objects from the canvas 
 		var basicCheck = function(canvasObject){
 			for (n in canvasObject){
-<<<<<<< HEAD
 				//if (canvasObject.hasOwnProperty(n)){
 					if (Array.isArray(canvasObject[n]) || typeof(canvasObject[n]) == 'object'){
-						document.write(n+":(Array)");
-						document.write("<br />");
-						multipleObjectHelper(canvasObject[n]);
-						document.write(n+":(/Array)");
-						document.write("<br />");				
-=======
-				if (canvasObject.hasOwnProperty(n)){
-					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) === 'object'){
-						curTextLine += n + ":(Array)";
+							curTextLine += n + ":(Array)";
 						<!-- curTextLine +=("<br />"); -->
-						arrayCheckerHelper(canvasObject[n]);
+						multipleObjectHelper(canvasObject[n]);
 						curTextLine += n + ":(/Array)";
 						<!-- curTextLine +=("<br />");				 -->
-						textline(curTextLine);
->>>>>>> origin/master
-						}
+						textline(curTextLine);			
+					}
 					if (validChecker(canvasObject[n]) == true){
 						storageHandler(n);
 						curTextLine +=": ";
@@ -63,10 +53,7 @@
 		
 	
 
-<<<<<<< HEAD
-//<<<<<<< HEAD
-=======
->>>>>>> origin/master
+
 		var validChecker = function(objectValue){
 			if (objectValue == null){
 				return false;
