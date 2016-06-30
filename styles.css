@@ -1,0 +1,9 @@
+.rowContainer {
+	position: relative;
+	padding: 5px;
+}
+
+.rowItem {
+	display: inline-block;
+	width: 49%;
+}

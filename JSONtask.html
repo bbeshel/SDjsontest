@@ -1,19 +1,37 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<link rel="stylesheet" href="styles.css" style="text/css">
+	</head>
+	<body>
+		<textarea id="transcriptionText" placeholder="Enter a IIIF canvas"></textarea>
+		<div class="rowContainer">
+			<span id="imgBoxx" class="rowItem"></span>
+			<span id="textBoxx" class="rowItem"></span>
+		</div>
+		
+	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
-<script>
+		<script>
 
-//Handles errors
-window.addEventListener('error',function(e){
-console.log(e)}, true);
+		var $curCont = $("#textBoxx");
+		var $curImg = $("#imgBoxx");
+		var curTextLine = "";
 
-//Handles the storage of information
+		//Handles errors
+		window.addEventListener('error',function(e){
+		console.log(e)}, true);
+
+		//Handles the storage of information
 		var storageHandler = function(unstoredObject){
-		document.write(unstoredObject);
+			curTextLine += unstoredObject;
 		}
 		
 		//Checks objects from the canvas 
 		var basicCheck = function(canvasObject){
 			for (n in canvasObject){
+<<<<<<< HEAD
 				//if (canvasObject.hasOwnProperty(n)){
 					if (Array.isArray(canvasObject[n]) || typeof(canvasObject[n]) == 'object'){
 						document.write(n+":(Array)");
@@ -21,56 +39,62 @@ console.log(e)}, true);
 						multipleObjectHelper(canvasObject[n]);
 						document.write(n+":(/Array)");
 						document.write("<br />");				
+=======
+				if (canvasObject.hasOwnProperty(n)){
+					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) === 'object'){
+						curTextLine += n + ":(Array)";
+						<!-- curTextLine +=("<br />"); -->
+						arrayCheckerHelper(canvasObject[n]);
+						curTextLine += n + ":(/Array)";
+						<!-- curTextLine +=("<br />");				 -->
+						textline(curTextLine);
+>>>>>>> origin/master
 						}
 					if (validChecker(canvasObject[n]) == true){
 						storageHandler(n);
-						document.write(": ");
+						curTextLine +=": ";
 						storageHandler(canvasObject[n]);
-						document.write("<br />");
+						textline(curTextLine);
+						<!-- curTextLine +=("<br />"); -->
 					}
 				//}
 			}
 		};
 		
-		var handleURL = function (url) {
-			//test if url first (basic test)
-			var result = url.search("http");
-			if (result > -1) {
-				var rexp = /\.jpg/i;
-				if (rexp.test(url)) {
-					resolveImage(url);
-				} else {
-					alert("Found a URL, but could not identify it!");
-				}
-			}	
-		};
-		
-		var resolveImage = function (imgUrl) {
-			var img = $("<img src='" + imgUrl + "' />");
-			img.on("load", function () {
-				//TODO: display the image somewhere here!
-			});
-		};
+	
 
+<<<<<<< HEAD
 //<<<<<<< HEAD
+=======
+>>>>>>> origin/master
 		var validChecker = function(objectValue){
-		if (objectValue == null){
-		return false;
-		}
+			if (objectValue == null){
+				return false;
+			}
 
-		else if (typeof objectValue === 'string'){
-			objectValue.trim();
-			if (objectValue.length > 0){
+			else if (typeof objectValue === 'string'){
+				<!-- objectValue.trim(); -->
+				if (objectValue.length > 0){
+					if (objectValue.substring(0, 4) === "http") {
+						handleURL(objectValue);
+					}
+					return true;
+				}
+			}
+			else if (typeof objectValue === 'number'){
+				if (objectValue > -1){
+					return true;
+				}
+			}
+			else if (typeof objectValue === 'boolean'){
 				return true;
 			}
-		}
-		else if (typeof objectValue === 'number'){
-			if (objectValue > -1){
-				return true;
-			}
+<<<<<<< HEAD
 		}
 		else if (typeof objectValue === 'boolean'){
 			return true;}
+=======
+>>>>>>> origin/master
 		};
 			
 		var multipleObjectHelper = function(multiObject){
@@ -92,10 +116,13 @@ console.log(e)}, true);
 			}
 		};
 		
+<<<<<<< HEAD
 //=======
 //>>>>>>> origin/master
 
 
+=======
+>>>>>>> origin/master
 		//Parses the canvas in order to obtain necessary data for redrawing the canvas
 		//How information will be parsed depends on the type of canvas
 		var canvasParser = function(canvas){
@@ -110,7 +137,55 @@ console.log(e)}, true);
 		//Some tests, to be deleted later
 		var exampleCanv = "http://165.134.241.141/annotationstore/annotation/55f9da84e4b04dde25a2734c";
 		if (exampleCanv.substring(0,4) === "http"){
-		var aThing = $.getJSON(exampleCanv, function(){alert("Image successfully obtained.")}).done(function()
-		{canvasParser(aThing)}).fail(function(){alert("A problem has been found. Cannot display image.")});
+			var aThing = $.getJSON(exampleCanv, function() {
+					alert("Image successfully obtained.");
+				}
+			).done( function() {
+				canvasParser(aThing);
+				}
+			).fail( function() {
+				alert("A problem has been found. Cannot display image.");
+				}
+			);
 		}
-</script>
+		
+		
+		//	HTML STUFF====================================================
+		var handleURL = function (url) {
+			//test if url first (basic test)
+			var result = url.search("http");
+			if (result > -1) {
+				var rexp = /\.jpg/i;
+				if (rexp.test(url)) {
+					resolveImage(url);
+				} else {
+					alert("Found a URL, but could not identify it!");
+				}
+			}	
+		};
+		
+		var resolveImage = function (imgUrl) {
+			var img = $("<img src='" + imgUrl + "' />");
+			img.on("load", function () {
+				//TODO: display the image somewhere here!
+				console.log("attempt image append");
+				$curImg.append(img);
+				
+			});
+		};
+		
+		var textline = function (text) {
+			$curCont.append("<p>" + text + "</p>");
+			$curCont.append("<br />");
+			curTextLine = "";
+		};
+
+
+
+
+	
+		</script>
+	</body>
+
+</html>
+
