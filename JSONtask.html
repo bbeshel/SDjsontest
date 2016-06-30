@@ -6,8 +6,8 @@
 	<body>
 		<textarea id="transcriptionText" placeholder="Enter a IIIF canvas"></textarea>
 		<div class="rowContainer">
-			<span class="rowItem">a</span>
-			<span class="rowItem">a</span>
+			<span id="imgBoxx" class="rowItem"></span>
+			<span id="textBoxx" class="rowItem"></span>
 		</div>
 		
 	
@@ -15,8 +15,9 @@
 
 		<script>
 
-		var $curCont;
-		var $curImg;
+		var $curCont = $("#textBoxx");
+		var $curImg = $("#imgBoxx");
+		var curTextLine = "";
 
 		//Handles errors
 		window.addEventListener('error',function(e){
@@ -24,7 +25,7 @@
 
 		//Handles the storage of information
 		var storageHandler = function(unstoredObject){
-		document.write(unstoredObject);
+			curTextLine += unstoredObject;
 		}
 		
 		//Checks objects from the canvas 
@@ -32,23 +33,85 @@
 		//make array checker it's own function arrayCheckerHelper
 			for (n in canvasObject){
 				if (canvasObject.hasOwnProperty(n)){
-					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) == 'object'){
-						document.write(n+":(Array)");
-						document.write("<br />");
+					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) === 'object'){
+						curTextLine += n + ":(Array)";
+						<!-- curTextLine +=("<br />"); -->
 						arrayCheckerHelper(canvasObject[n]);
-						document.write(n+":(/Array)");
-						document.write("<br />");				
+						curTextLine += n + ":(/Array)";
+						<!-- curTextLine +=("<br />");				 -->
+						textline(curTextLine);
 						}
 					if (validChecker(canvasObject[n]) == true){
 						storageHandler(n);
-						document.write(": ");
+						curTextLine +=": ";
 						storageHandler(canvasObject[n]);
-						document.write("<br />");
+						textline(curTextLine);
+						<!-- curTextLine +=("<br />"); -->
 					}
 				}
 			}
 		};
 		
+	
+
+		var validChecker = function(objectValue){
+			if (objectValue == null){
+				return false;
+			}
+
+			else if (typeof objectValue === 'string'){
+				<!-- objectValue.trim(); -->
+				if (objectValue.length > 0){
+					if (objectValue.substring(0, 4) === "http") {
+						handleURL(objectValue);
+					}
+					return true;
+				}
+			}
+			else if (typeof objectValue === 'number'){
+				if (objectValue > -1){
+					return true;
+				}
+			}
+			else if (typeof objectValue === 'boolean'){
+				return true;
+			}
+		};
+			
+		var arrayCheckerHelper = function(canvasArray){
+			for (var n=0; n<canvasArray.length; n++){
+				basicCheck(canvasArray[n]);
+			}
+		};
+		
+		//Parses the canvas in order to obtain necessary data for redrawing the canvas
+		//How information will be parsed depends on the type of canvas
+		var canvasParser = function(canvas){
+			var text = canvas.responseText;
+			var parsedCanv = JSON.parse(text);
+			console.log(parsedCanv);
+			var type = parsedCanv["@type"];
+			basicCheck(parsedCanv);
+		};
+
+
+		//Some tests, to be deleted later
+		var exampleCanv = "http://165.134.241.141/annotationstore/annotation/55f9da84e4b04dde25a2734c";
+		if (exampleCanv.substring(0,4) === "http"){
+			var aThing = $.getJSON(exampleCanv, function() {
+					alert("Image successfully obtained.");
+				}
+			).done( function() {
+				canvasParser(aThing);
+				}
+			).fail( function() {
+				alert("A problem has been found. Cannot display image.");
+				}
+			);
+		}
+		
+		
+		//	HTML STUFF====================================================
 		var handleURL = function (url) {
 			//test if url first (basic test)
 			var result = url.search("http");
@@ -66,71 +129,22 @@
 			var img = $("<img src='" + imgUrl + "' />");
 			img.on("load", function () {
 				//TODO: display the image somewhere here!
-			});
-		};
-
-
-		var validChecker = function(objectValue){
-		if (objectValue == null){
-		return false;
-		}
-
-		else if (typeof objectValue === 'string'){
-			objectValue.trim();
-			if (objectValue.length > 0){
-				return true;
-			}
-		}
-		else if (typeof objectValue === 'number'){
-			if (objectValue > -1){
-				return true;
-			}
-		}
-		else if (typeof objectValue === 'boolean'){
-			return true;}
-	
-		};
-			
-		var arrayCheckerHelper = function(canvasArray){
-			for (var n=0; n<canvasArray.length; n++){
-				basicCheck(canvasArray[n]);
-			}
-		};
-
-
-		
-		var resolveImage = function (imgUrl) {
-			var img = $("<img src='" + imgUrl + "' />");
-			img.on("load", function () {
-				//TODO: display the image somewhere here!
+				console.log("attempt image append");
+				$curImg.append(img);
+				
 			});
 		};
 		
 		var textline = function (text) {
 			$curCont.append("<p>" + text + "</p>");
 			$curCont.append("<br />");
+			curTextLine = "";
 		};
 
 
 
 
-		//Parses the canvas in order to obtain necessary data for redrawing the canvas
-		//How information will be parsed depends on the type of canvas
-		var canvasParser = function(canvas){
-			var text = canvas.responseText;
-			var parsedCanv = JSON.parse(text);
-			console.log(parsedCanv);
-			var type = parsedCanv["@type"];
-			basicCheck(parsedCanv);
-		};
-
-
-		//Some tests, to be deleted later
-		var exampleCanv = "http://165.134.241.141/annotationstore/annotation/55f9da84e4b04dde25a2734c";
-		if (exampleCanv.substring(0,4) === "http"){
-		var aThing = $.getJSON(exampleCanv, function(){alert("Image successfully obtained.")}).done(function()
-		{canvasParser(aThing)}).fail(function(){alert("A problem has been found. Cannot display image.")});
-		}
+	
 		</script>
 	</body>
 
