@@ -13,13 +13,12 @@ console.log(e)}, true);
 		
 		//Checks objects from the canvas 
 		var basicCheck = function(canvasObject){
-		//make array checker it's own function arrayCheckerHelper
 			for (n in canvasObject){
-				if (canvasObject.hasOwnProperty(n)){
-					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) == 'object'){
+				//if (canvasObject.hasOwnProperty(n)){
+					if (Array.isArray(canvasObject[n]) || typeof(canvasObject[n]) == 'object'){
 						document.write(n+":(Array)");
 						document.write("<br />");
-						arrayCheckerHelper(canvasObject[n]);
+						multipleObjectHelper(canvasObject[n]);
 						document.write(n+":(/Array)");
 						document.write("<br />");				
 						}
@@ -29,7 +28,7 @@ console.log(e)}, true);
 						storageHandler(canvasObject[n]);
 						document.write("<br />");
 					}
-				}
+				//}
 			}
 		};
 		
@@ -53,7 +52,7 @@ console.log(e)}, true);
 			});
 		};
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 		var validChecker = function(objectValue){
 		if (objectValue == null){
 		return false;
@@ -72,17 +71,29 @@ console.log(e)}, true);
 		}
 		else if (typeof objectValue === 'boolean'){
 			return true;}
-	
 		};
 			
-		var arrayCheckerHelper = function(canvasArray){
-			for (var n=0; n<canvasArray.length; n++){
-				basicCheck(canvasArray[n]);
+		var multipleObjectHelper = function(multiObject){
+			switch(Array.isArray(multiObject)){
+				case true:
+					//Add the name of the array + "(Array)"
+					for (var n=0; n<multiObject.length; n++){
+						basicCheck(multiObject[n]);
+					}
+					//Add the name of the array, + "(/Array)"
+					break;
+						
+			
+				case false:
+					//Add the name of the object, + "(Object, containing:)"
+					basicCheck(multiObject);
+					//Add the name of the object, + "(/Object)"
+					break;
 			}
 		};
 		
-=======
->>>>>>> origin/master
+//=======
+//>>>>>>> origin/master
 
 
 		//Parses the canvas in order to obtain necessary data for redrawing the canvas
