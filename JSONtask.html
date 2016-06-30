@@ -16,7 +16,7 @@ console.log(e)}, true);
 		//make array checker it's own function arrayCheckerHelper
 			for (n in canvasObject){
 				if (canvasObject.hasOwnProperty(n)){
-					if (Array.isArray(canvasObject[n])){
+					if (Array.isArray(canvasObject[n]) || typeof(canvasObject) == 'object'){
 						document.write(n+":(Array)");
 						document.write("<br />");
 						arrayCheckerHelper(canvasObject[n]);
@@ -32,7 +32,28 @@ console.log(e)}, true);
 				}
 			}
 		};
+		
+		var handleURL = function (url) {
+			//test if url first (basic test)
+			var result = url.search("http");
+			if (result > -1) {
+				var rexp = /\.jpg/i;
+				if (rexp.test(url)) {
+					resolveImage(url);
+				} else {
+					alert("Found a URL, but could not identify it!");
+				}
+			}	
+		};
+		
+		var resolveImage = function (imgUrl) {
+			var img = $("<img src='" + imgUrl + "' />");
+			img.on("load", function () {
+				//TODO: display the image somewhere here!
+			});
+		};
 
+<<<<<<< HEAD
 		var validChecker = function(objectValue){
 		if (objectValue == null){
 		return false;
@@ -60,6 +81,8 @@ console.log(e)}, true);
 			}
 		};
 		
+=======
+>>>>>>> origin/master
 
 
 		//Parses the canvas in order to obtain necessary data for redrawing the canvas
