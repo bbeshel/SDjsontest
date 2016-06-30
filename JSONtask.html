@@ -8,50 +8,58 @@ console.log(e)}, true);
 
 //Handles the storage of information
 		var storageHandler = function(unstoredObject){
-		if (unstoredObject === null){
-		console.log("Warning: This value is null!");
-		}
-		//Later, add a warning that a attribute was null, and what id it was
 		document.write(unstoredObject);
 		}
+		
 		//Checks objects from the canvas 
 		var basicCheck = function(canvasObject){
-			if (Array.isArray(canvasObject)){
-				for (var n=0; n<canvasObject.length; n++){
-				basicCheck(canvasObject[n]);
-				document.write("<br />");
-				}
-			}
-			
-			else if (typeof canvasObject === 'string'){
-				canvasObject = canvasObject.trim();
-				if (canvasObject.length > 0){
-				storageHandler(canvasObject);
-				document.write("<br />");
-				}
-			}
-
-			else if (typeof canvasObject === 'number'){
-				if (canvasObject > 0){
-				storageHandler(canvasObject);
-				document.write("<br />");
-				}
-			}
-			else if (typeof canvasObject === 'object'){
-				for (n in canvasObject){
-					if (canvasObject.hasOwnProperty(n)){
-						if (canvasObject[n] != undefined){
-						basicCheck(n);
-						document.write(": ");
-						basicCheck(canvasObject[n]);
+		//make array checker it's own function arrayCheckerHelper
+			for (n in canvasObject){
+				if (canvasObject.hasOwnProperty(n)){
+					if (Array.isArray(canvasObject[n])){
+						document.write(n+":(Array)");
 						document.write("<br />");
-					}
+						arrayCheckerHelper(canvasObject[n]);
+						document.write(n+":(/Array)");
+						document.write("<br />");				
+						}
+					if (validChecker(canvasObject[n]) == true){
+						storageHandler(n);
+						document.write(": ");
+						storageHandler(canvasObject[n]);
+						document.write("<br />");
 					}
 				}
 			}
 		};
 
+		var validChecker = function(objectValue){
+		if (objectValue == null){
+		return false;
+		}
+
+		else if (typeof objectValue === 'string'){
+			objectValue.trim();
+			if (objectValue.length > 0){
+				return true;
+			}
+		}
+		else if (typeof objectValue === 'number'){
+			if (objectValue > -1){
+				return true;
+			}
+		}
+		else if (typeof objectValue === 'boolean'){
+			return true;}
+	
+		};
 			
+		var arrayCheckerHelper = function(canvasArray){
+			for (var n=0; n<canvasArray.length; n++){
+				basicCheck(canvasArray[n]);
+			}
+		};
+		
 
 
 		//Parses the canvas in order to obtain necessary data for redrawing the canvas
@@ -61,15 +69,11 @@ console.log(e)}, true);
 			var parsedCanv = JSON.parse(text);
 			console.log(parsedCanv);
 			var type = parsedCanv["@type"];
-			//for (var n in canvas parsedCanv){
-				basicCheck(parsedCanv);
-			//}
+			basicCheck(parsedCanv);
 		};
 
 
 		//Some tests, to be deleted later
-		//var moreThings = '[{"@another":"anime", "@food":"fish"}, {"@pet":"rabbit"},{"@number":13,"@nothing":""}]';
-		//canvasParser(moreThings);
 		var exampleCanv = "http://165.134.241.141/annotationstore/annotation/55f9da84e4b04dde25a2734c";
 		if (exampleCanv.substring(0,4) === "http"){
 		var aThing = $.getJSON(exampleCanv, function(){alert("Image successfully obtained.")}).done(function()
