@@ -17,6 +17,7 @@
 		var anoListURL = "";
 		var canvasURL = "";
 		var insideAnnoList = false;
+		var annoNumber = 0;
 
 		//Handles errors
 		window.addEventListener('error',function(e){
@@ -76,9 +77,10 @@
 									textline(curTextLine, $textOb);
 								}*/
 								if(canvasObject[n] == "oa:Annotation"){
-									curTextLine += "Annotation"
+									curTextLine += "Annotation " + annoNumber.toString();
 									curTextLine += ("<br />");
 									textline(curTextLine, $textOb);
+									annoNumber += 1;
 								}
 								break;
 								
@@ -180,6 +182,7 @@
 			if (type === "sc:AnnotationList") {
 				anoListURL = parsedCanv["@id"];
 				basicCheck(parsedCanv, $curAno);
+				insideAnnoList = false;
 			} else if (type === "sc:Canvas") {
 				canvasURL = parsedCanv["@id"];
 				basicCheck(parsedCanv, $curCont);
