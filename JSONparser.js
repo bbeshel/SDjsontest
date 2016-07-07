@@ -16,6 +16,7 @@
 		var lastURL = "";
 		var anoListURL = "";
 		var canvasURL = "";
+		var insideAnnoList = false;
 
 		//Handles errors
 		window.addEventListener('error',function(e){
@@ -33,8 +34,10 @@
 			}
 			if (canvasObject["@type"] === "sc:AnnotationList") {
 				$textOb = $curAno;
+				insideAnnoList = true;
 				handleURL(canvasObject["@id"]);
-			}
+				}
+				
 			if (canvasObject["@type"] === "dctypes:Image") {
 				console.log(canvasObject);
 				console.log(canvasObject["resource"]["@id"]);
@@ -45,26 +48,72 @@
 				//if (canvasObject.hasOwnProperty(n)){
 				// // debugger; -->
 				console.log("in loop");
+				console.log(n);
+				console.log(canvasObject[n]);
 					if (Array.isArray(canvasObject[n])){
-						curTextLine += n + ":(Array)";
-						textline(curTextLine, $textOb);
-						basicCheck(canvasObject[n], $textOb);
-						curTextLine += "(/Array)";
-						// curTextLine +=("<br />");				 -->
-						textline(curTextLine, $textOb, 1);		
+								//curTextLine += n + ":(Array)";
+								//textline(curTextLine, $textOb);
+							basicCheck(canvasObject[n], $textOb);
+							//curTextLine += "(/Array)";
+							// curTextLine +=("<br />");				 -->
+							//textline(curTextLine, $textOb, 1);					
 					} else if (typeof(canvasObject[n]) === 'object') {
-						curTextLine += n + ":(Object, containing:)";
-						textline(curTextLine, $textOb);
-						basicCheck(canvasObject[n], $textOb);
-						curTextLine += "(/Object)";
-						// curTextLine +=("<br />");				 -->
-						textline(curTextLine, $textOb, 1);
+								//curTextLine += n + ":(Object, containing:)";
+								//textline(curTextLine, $textOb);
+							
+							basicCheck(canvasObject[n], $textOb);
+								//curTextLine += "(/Object)";
+								// curTextLine +=("<br />");				 -->
+								//textline(curTextLine, $textOb, 1);
+							
 					} else if (validChecker(canvasObject[n]) == true){
-						// storageHandler(n); -->
-						curTextLine += n + ": ";
-						curTextLine += canvasObject[n];
-						textline(curTextLine, $textOb);
-						// curTextLine +=("<br />"); -->
+						if (insideAnnoList){
+							switch(n){
+								case "@type":
+								/*if (canvasObject[n]=="sc:AnnotationList"){
+									curTextLine += "Annotation List";
+									curTextLine += ("<br />");
+									textline(curTextLine, $textOb);
+								}*/
+								if(canvasObject[n] == "oa:Annotation"){
+									curTextLine += "Annotation"
+									curTextLine += ("<br />");
+									textline(curTextLine, $textOb);
+								}
+								break;
+								
+								case "label":
+								curTextLine += "Label: " + canvasObject[n];
+								curTextLine += ("<br />");
+								textline(curTextLine, $textOb);
+								break;
+								
+								case "cnt:chars":
+								curTextLine += "Text: " + canvasObject[n];
+								curTextLine += ("<br />");
+								textline(curTextLine, $textOb);
+								break;
+								
+								/*case "forProject":
+								curTextLine += "For: " + canvasObject[n];
+								curTextLine += ("<br />");
+								textline(curTextLine, $textOb);
+								break;
+								
+								case "@id":
+								curTextLine += "ID: " + canvasObject[n];
+								curTextLine += ("<br />");
+								textline(curTextLine, $textOb);
+								break;
+								*/
+								
+							}
+							// storageHandler(n); -->
+							//curTextLine += n + ": ";
+							//curTextLine += canvasObject[n];
+							//textline(curTextLine, $textOb);
+							// curTextLine +=("<br />"); -->
+						}
 					} else {
 						console.error("Something went wrong here:");
 						console.error(canvasObject[n]);
@@ -73,7 +122,6 @@
 			}
 		};
 		
-	
 
 
 		var validChecker = function(objectValue){
@@ -197,7 +245,8 @@
 					// console.log(url); -->
 					resolveCanvasURL(url);
 				}
-			}	
+			}
+			insideAnnoList = false;			
 		};
 		
 		var resolveImage = function (imgUrl) {
