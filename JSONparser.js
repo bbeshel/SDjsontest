@@ -79,7 +79,7 @@
 								if(canvasObject[n] == "oa:Annotation"){
 									curTextLine += "Annotation " + annoNumber.toString();
 									curTextLine += ("<br />");
-									textline(curTextLine, $textOb);
+									textline(curTextLine, $textOb, 1);
 									annoNumber += 1;
 								}
 								break;
