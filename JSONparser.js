@@ -16,7 +16,7 @@
 		var lastURL = "";
 		var anoListURL = "";
 		var canvasURL = "";
-		var insideAnnoList = false;
+		//var insideAnnoList = false; 
 		var annoNumber = 0;
 
 		//Handles errors
@@ -35,7 +35,7 @@
 			}
 			if (canvasObject["@type"] === "sc:AnnotationList") {
 				$textOb = $curAno;
-				insideAnnoList = true;
+				//insideAnnoList = true;
 				handleURL(canvasObject["@id"]);
 				}
 				
@@ -51,6 +51,8 @@
 				console.log("in loop");
 				console.log(n);
 				console.log(canvasObject[n]);
+				/* Slashed out curTextLine lines and textline lines will cause the  program to
+				 display all attributes of a canvas instead of just certain ones from annotations.*/
 					if (Array.isArray(canvasObject[n])){
 								//curTextLine += n + ":(Array)";
 								//textline(curTextLine, $textOb);
@@ -68,7 +70,7 @@
 								//textline(curTextLine, $textOb, 1);
 							
 					} else if (validChecker(canvasObject[n]) == true){
-						if (insideAnnoList){
+						if ($textOb == $curAno){
 							switch(n){
 								case "@type":
 								/*if (canvasObject[n]=="sc:AnnotationList"){
@@ -182,7 +184,7 @@
 			if (type === "sc:AnnotationList") {
 				anoListURL = parsedCanv["@id"];
 				basicCheck(parsedCanv, $curAno);
-				insideAnnoList = false;
+				//insideAnnoList = false;
 			} else if (type === "sc:Canvas") {
 				canvasURL = parsedCanv["@id"];
 				basicCheck(parsedCanv, $curCont);
